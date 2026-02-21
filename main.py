@@ -1,0 +1,215 @@
+import argparse
+import sys
+from pathlib import Path
+from typing import Optional
+
+from src.whatsapp_automation import WhatsAppAutomation, CampaignResult
+from src.message_templates import MessageTemplateManager
+from config.settings import ConfigManager
+
+
+def create_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="WhatsApp Automation Tool - Send personalized messages to leads",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  %(prog)s --leads data/leads.csv --template business_proposal
+  %(prog)s --leads data/leads.csv --template business_proposal --dry-run
+  %(prog)s --leads data/leads.csv --template business_proposal --start 10 --end 20
+  %(prog)s --list-templates
+        """
+    )
+    
+    parser.add_argument(
+        "--leads",
+        type=Path,
+        help="Path to CSV file containing leads"
+    )
+    
+    parser.add_argument(
+        "--template",
+        type=str,
+        help="Name of message template to use"
+    )
+    
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Simulate campaign without sending messages"
+    )
+    
+    parser.add_argument(
+        "--start",
+        type=int,
+        default=0,
+        help="Start index for processing (default: 0)"
+    )
+    
+    parser.add_argument(
+        "--end",
+        type=int,
+        help="End index for processing (default: end of file)"
+    )
+    
+    parser.add_argument(
+        "--config",
+        type=Path,
+        default=Path("config/config.yaml"),
+        help="Path to configuration file"
+    )
+    
+    parser.add_argument(
+        "--list-templates",
+        action="store_true",
+        help="List available message templates"
+    )
+    
+    parser.add_argument(
+        "--validate-leads",
+        type=Path,
+        help="Validate phone numbers in leads file"
+    )
+    
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("output"),
+        help="Output directory for results"
+    )
+    
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Enable verbose logging"
+    )
+    
+    return parser
+
+
+def list_templates() -> None:
+    """List all available message templates."""
+    manager = MessageTemplateManager()
+    templates = manager.list_templates()
+    
+    print("Available Templates:")
+    print("-" * 40)
+    for name, description in templates.items():
+        print(f"  {name}: {description}")
+
+
+def validate_leads(leads_file: Path) -> None:
+    """Validate phone numbers in leads file."""
+    from src.phone_validator import PhoneValidator
+    import pandas as pd
+    
+    validator = PhoneValidator()
+    
+    try:
+        df = pd.read_csv(leads_file)
+        
+        if "Phone Number" not in df.columns:
+            print("Error: 'Phone Number' column not found in CSV")
+            return
+        
+        valid_count = 0
+        invalid_count = 0
+        invalid_numbers = []
+        
+        for idx, phone in df["Phone Number"].items():
+            if validator.validate_and_format(phone):
+                valid_count += 1
+            else:
+                invalid_count += 1
+                invalid_numbers.append((idx + 1, phone))
+        
+        print(f"Validation Results for {leads_file}:")
+        print(f"  Valid numbers: {valid_count}")
+        print(f"  Invalid numbers: {invalid_count}")
+        
+        if invalid_numbers:
+            print("\nInvalid numbers:")
+            for row_num, phone in invalid_numbers[:10]:
+                print(f"  Row {row_num}: {phone}")
+            if len(invalid_numbers) > 10:
+                print(f"  ... and {len(invalid_numbers) - 10} more")
+    
+    except Exception as e:
+        print(f"Error validating leads: {e}")
+
+
+def progress_callback(lead, successful, failed):
+    """Progress callback for campaign processing."""
+    print(f"\rProgress: {successful + failed} processed, "
+          f"{successful} successful, {failed} failed", end="", flush=True)
+
+
+def run_campaign(args) -> Optional[CampaignResult]:
+    """Run WhatsApp campaign with provided arguments."""
+    config_manager = ConfigManager(args.config)
+    config = config_manager.get_config()
+    
+    if args.verbose:
+        config.logging.level = "DEBUG"
+    
+    automation = WhatsAppAutomation(
+        config=config.__dict__,
+        progress_callback=progress_callback if not args.verbose else None
+    )
+    
+    try:
+        result = automation.run_campaign(
+            leads_file=args.leads,
+            template_name=args.template,
+            dry_run=args.dry_run,
+            start_index=args.start,
+            end_index=args.end
+        )
+        
+        print(f"\n\nCampaign Results:")
+        print(f"  Total leads: {result.total_leads}")
+        print(f"  Successful: {result.successful_sends}")
+        print(f"  Failed: {result.failed_sends}")
+        print(f"  Invalid numbers: {result.invalid_numbers}")
+        print(f"  Duration: {result.duration_seconds:.2f} seconds")
+        
+        if args.dry_run:
+            print("\nNOTE: This was a dry run - no messages were sent")
+        
+        return result
+        
+    except Exception as e:
+        print(f"Error running campaign: {e}")
+        return None
+
+
+def main():
+    """Main CLI entry point."""
+    parser = create_parser()
+    args = parser.parse_args()
+    
+    if args.list_templates:
+        list_templates()
+        return
+    
+    if args.validate_leads:
+        validate_leads(args.validate_leads)
+        return
+    
+    if not args.leads or not args.template:
+        parser.print_help()
+        print("\nError: --leads and --template are required")
+        sys.exit(1)
+    
+    if not args.leads.exists():
+        print(f"Error: Leads file not found: {args.leads}")
+        sys.exit(1)
+    
+    result = run_campaign(args)
+    
+    if result is None:
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

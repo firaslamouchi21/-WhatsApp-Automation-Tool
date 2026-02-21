@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  whatsapp-automation:
+    build: .
+    container_name: whatsapp-automation-tool
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./output:/app/output
+      - ./config:/app/config
+      - ./config/config.yaml:/app/config/config.yaml:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DISPLAY=:99
+      - BROWSER=chromium-wrapper
+      - WHATSAPP_RATE_LIMIT=20
+      - LOG_LEVEL=INFO
+    ports:
+      - "6080:6080"
+      - "5900:5900"
+    command: ["sleep", "infinity"]
+    restart: unless-stopped
+    networks:
+      - whatsapp-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: whatsapp-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - whatsapp-network
+
+volumes:
+  redis_data:
+
+networks:
+  whatsapp-network:
+    driver: bridge

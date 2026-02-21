@@ -1,0 +1,97 @@
+# WhatsApp Message Templates
+# Edit this file to add your own templates.
+# Each template has:
+#   - name: Display name
+#   - subject: Subject (optional)
+#   - template: Message text. Use {variable} placeholders.
+#   - variables: List of variables used in the template
+#   - language: en or ar
+
+business_proposal:
+  name: "Business Proposal"
+  subject: "Website Development Proposal"
+  template: |
+    Hi {business_name},
+
+    I'm Firas, a developer based in Doha. I noticed your business on Google Maps-great work, but you're missing a professional website.
+
+    I can build you a fast storefront connected directly to your WhatsApp in just 5 days.
+
+    Are you interested in a quick demo?
+    Best regards,
+    Firas
+  variables: ["business_name"]
+  language: en
+
+business_proposal_arabic:
+  name: "Business Proposal (Arabic)"
+  subject: "اقتراح تطوير الموقع الإلكتروني"
+  template: |
+    السلام عليكم {business_name}، معك فراس مبرمج في الدوحة.
+
+    شفت شغلكم على خرائط جوجل وما شاء الله التقييمات ممتازة، لكن لاحظت أنكم تحتاجون موقع إلكتروني احترافي لعرض أعمالكم.
+
+    أنا متخصص في بناء مواقع سريعة جدا ومرتبطة بالواتساب مباشرة، بحيث تصلكم الطلبات منظمة. أقدر أجهز لكم الموقع بالكامل خلال خمسة أيام فقط وبسعر منافس.
+
+    هل أنتم مهتمون بتجربة نسخة تجريبية؟
+    مع تحياتي، فراس
+  variables: ["business_name"]
+  language: ar
+
+followup:
+  name: "Follow-up"
+  subject: "Following Up"
+  template: |
+    Hi {business_name},
+
+    Just following up on my previous message about your website.
+
+    Would you be interested in a quick 5-minute demo this week?
+
+    Best regards,
+    Firas
+  variables: ["business_name"]
+  language: en
+
+followup_arabic:
+  name: "Follow-up (Arabic)"
+  subject: "متابعة"
+  template: |
+    السلام عليكم {business_name}،
+
+    أردت فقط أتابع معاك بخصوص الموقع الإلكتروني.
+
+    هل تحب تشوف عرض سريع هذا الأسبوع؟
+    مع تحياتي، فراس
+  variables: ["business_name"]
+  language: ar
+
+promotion:
+  name: "Special Promotion"
+  subject: "Limited Time Offer"
+  template: |
+    Hi {business_name},
+
+    Special offer this week: 20% off on all website development projects for {category} businesses.
+
+    Let me know if you'd like to see samples.
+
+    Best regards,
+    Firas
+  variables: ["business_name", "category"]
+  language: en
+
+appointment:
+  name: "Appointment Request"
+  subject: "Schedule a Meeting"
+  template: |
+    Hi {business_name},
+
+    I'd like to schedule a brief call to discuss your website needs.
+
+    Are you available sometime tomorrow or the day after?
+
+    Best regards,
+    Firas
+  variables: ["business_name"]
+  language: en
