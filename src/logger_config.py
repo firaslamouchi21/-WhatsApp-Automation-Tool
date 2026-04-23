@@ -5,7 +5,8 @@ from typing import Optional
 
 
 class LoggerConfig:
-    
+
+    @staticmethod
     def setup_logger(
         name: str,
         log_file: Optional[Path] = None,

@@ -15,7 +15,7 @@ class MessageTemplateManager:
         self.templates: Dict[str, Dict[str, Any]] = {}
         self._load_all_templates()
     
-    def _load_all_templates(self):
+    def _load_all_templates(self) -> None:
         if not self.templates_dir.exists():
             self.templates_dir = Path(__file__).parent.parent / "templates"
             
