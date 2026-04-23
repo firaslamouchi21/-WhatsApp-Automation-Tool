@@ -1,4 +1,3 @@
-
 import pytest
 from src.phone_validator import PhoneValidator, PhoneValidationError
 
