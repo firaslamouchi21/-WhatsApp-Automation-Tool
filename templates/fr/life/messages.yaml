@@ -1,0 +1,33 @@
+coaching_fitness:
+  name: "Coaching Fitness"
+  subject: "Atteignez vos objectifs de santé"
+  template: |
+    Bonjour {business_name},
+
+    Vous cherchez à être en meilleure forme cette année ?
+
+    Nous proposons un coaching fitness personnalisé et des plans de nutrition conçus pour s'adapter à votre style de vie bien rempli.
+
+    Souhaitez-vous essayer une séance d'introduction gratuite ?
+
+    Cordialement,
+    L'équipe Santé et Bien-être
+  variables: ["business_name"]
+  language: fr
+
+nettoyage_maison:
+  name: "Nettoyage de Maison"
+  subject: "Profitez d'une maison d'une propreté éclatante"
+  template: |
+    Bonjour {business_name},
+
+    La vie est bien remplie ! Pourquoi passer vos week-ends à nettoyer ?
+
+    Nos services professionnels de nettoyage à domicile sont fiables, complets et abordables.
+
+    Pouvons-nous vous proposer un devis gratuit ?
+
+    Cordialement,
+    L'équipe des Services de Nettoyage
+  variables: ["business_name"]
+  language: fr

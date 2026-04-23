@@ -1,4 +1,3 @@
-"""Application settings and configuration management."""
 
 import os
 from pathlib import Path
@@ -8,7 +7,6 @@ from dataclasses import dataclass, asdict
 
 @dataclass
 class WhatsAppConfig:
-    """WhatsApp automation settings."""
     rate_limit_delay: int = 20
     wait_time: int = 10
     tab_close: bool = True
@@ -18,16 +16,14 @@ class WhatsAppConfig:
 
 @dataclass
 class LoggingConfig:
-    """Logging configuration."""
     level: str = "INFO"
     log_file: Path = Path("logs/whatsapp_automation.log")
-    max_file_size: int = 10 * 1024 * 1024  # 10MB
+    max_file_size: int = 10 * 1024 * 1024
     backup_count: int = 5
 
 
 @dataclass
 class ProcessingConfig:
-    """Data processing settings."""
     batch_size: int = 100
     parallel_processing: bool = False
     max_workers: int = 4
@@ -36,7 +32,6 @@ class ProcessingConfig:
 
 @dataclass
 class AppConfig:
-    """Main application configuration."""
     whatsapp: WhatsAppConfig
     logging: LoggingConfig
     processing: ProcessingConfig
@@ -46,21 +41,17 @@ class AppConfig:
 
 
 class ConfigManager:
-    """Manage application configuration."""
     
     def __init__(self, config_file: Optional[Path] = None):
-        """Initialize configuration manager."""
         self.config_file = config_file or Path("config/config.yaml")
         self.config = self._load_config()
     
     def _load_config(self) -> AppConfig:
-        """Load configuration from file or defaults."""
         if self.config_file.exists():
             return self._load_from_file()
         return self._get_default_config()
     
     def _load_from_file(self) -> AppConfig:
-        """Load configuration from YAML file."""
         import yaml
         
         try:
@@ -80,7 +71,6 @@ class ConfigManager:
             raise RuntimeError(f"Error loading config: {e}")
     
     def _get_default_config(self) -> AppConfig:
-        """Get default configuration."""
         return AppConfig(
             whatsapp=WhatsAppConfig(),
             logging=LoggingConfig(),
@@ -88,7 +78,6 @@ class ConfigManager:
         )
     
     def save_config(self) -> None:
-        """Save current configuration to file."""
         import yaml
         
         self.config_file.parent.mkdir(parents=True, exist_ok=True)
@@ -97,17 +86,14 @@ class ConfigManager:
             yaml.dump(asdict(self.config), f, default_flow_style=False)
     
     def get_config(self) -> AppConfig:
-        """Get current configuration."""
         return self.config
     
     def update_config(self, updates: Dict[str, Any]) -> None:
-        """Update configuration with new values."""
         for key, value in updates.items():
             if hasattr(self.config, key):
                 setattr(self.config, key, value)
     
     def get_env_overrides(self) -> Dict[str, Any]:
-        """Get configuration overrides from environment variables."""
         overrides = {}
         
         env_mappings = {

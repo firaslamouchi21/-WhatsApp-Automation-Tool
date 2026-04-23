@@ -1,0 +1,31 @@
+demande_reunion:
+  name: "Demande de Réunion"
+  subject: "Demande de brève réunion"
+  template: |
+    Bonjour {business_name},
+
+    Je souhaiterais planifier une courte réunion pour discuter des opportunités de collaboration potentielle entre nos entreprises.
+
+    Seriez-vous disponible pour un appel de 15 minutes cette semaine ?
+
+    Cordialement,
+    L'équipe des Services Professionnels
+  variables: ["business_name"]
+  language: fr
+
+mise_a_jour_projet:
+  name: "Mise à jour du Projet"
+  subject: "Mise à jour sur le projet en cours"
+  template: |
+    Bonjour {business_name},
+
+    Je voulais vous donner une mise à jour rapide sur l'avancement de notre projet actuel.
+
+    Tout progresse comme prévu, et nous prévoyons d'avoir terminé la prochaine étape d'ici vendredi.
+
+    N'hésitez pas à nous contacter si vous avez des questions !
+
+    Cordialement,
+    L'équipe de Gestion de Projet
+  variables: ["business_name"]
+  language: fr

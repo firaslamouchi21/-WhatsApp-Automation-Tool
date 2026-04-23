@@ -10,85 +10,66 @@ from config.settings import ConfigManager
 
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="WhatsApp Automation Tool - Send personalized messages to leads",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  %(prog)s --leads data/leads.csv --template business_proposal
-  %(prog)s --leads data/leads.csv --template business_proposal --dry-run
-  %(prog)s --leads data/leads.csv --template business_proposal --start 10 --end 20
-  %(prog)s --list-templates
-        """
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
     
     parser.add_argument(
         "--leads",
-        type=Path,
-        help="Path to CSV file containing leads"
+        type=Path
     )
     
     parser.add_argument(
         "--template",
-        type=str,
-        help="Name of message template to use"
+        type=str
     )
     
     parser.add_argument(
         "--dry-run",
-        action="store_true",
-        help="Simulate campaign without sending messages"
+        action="store_true"
     )
     
     parser.add_argument(
         "--start",
         type=int,
-        default=0,
-        help="Start index for processing (default: 0)"
+        default=0
     )
     
     parser.add_argument(
         "--end",
-        type=int,
-        help="End index for processing (default: end of file)"
+        type=int
     )
     
     parser.add_argument(
         "--config",
         type=Path,
-        default=Path("config/config.yaml"),
-        help="Path to configuration file"
+        default=Path("config/config.yaml")
     )
     
     parser.add_argument(
         "--list-templates",
-        action="store_true",
-        help="List available message templates"
+        action="store_true"
     )
     
     parser.add_argument(
         "--validate-leads",
-        type=Path,
-        help="Validate phone numbers in leads file"
+        type=Path
     )
     
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("output"),
-        help="Output directory for results"
+        default=Path("output")
     )
     
     parser.add_argument(
         "--verbose",
-        action="store_true",
-        help="Enable verbose logging"
+        action="store_true"
     )
     
     return parser
 
 
 def list_templates() -> None:
-    """List all available message templates."""
     manager = MessageTemplateManager()
     templates = manager.list_templates()
     
@@ -99,7 +80,6 @@ def list_templates() -> None:
 
 
 def validate_leads(leads_file: Path) -> None:
-    """Validate phone numbers in leads file."""
     from src.phone_validator import PhoneValidator
     import pandas as pd
     
@@ -139,13 +119,11 @@ def validate_leads(leads_file: Path) -> None:
 
 
 def progress_callback(lead, successful, failed):
-    """Progress callback for campaign processing."""
     print(f"\rProgress: {successful + failed} processed, "
           f"{successful} successful, {failed} failed", end="", flush=True)
 
 
 def run_campaign(args) -> Optional[CampaignResult]:
-    """Run WhatsApp campaign with provided arguments."""
     config_manager = ConfigManager(args.config)
     config = config_manager.get_config()
     
@@ -174,7 +152,7 @@ def run_campaign(args) -> Optional[CampaignResult]:
         print(f"  Duration: {result.duration_seconds:.2f} seconds")
         
         if args.dry_run:
-            print("\nNOTE: This was a dry run - no messages were sent")
+            print("\n")
         
         return result
         
@@ -184,7 +162,6 @@ def run_campaign(args) -> Optional[CampaignResult]:
 
 
 def main():
-    """Main CLI entry point."""
     parser = create_parser()
     args = parser.parse_args()
     

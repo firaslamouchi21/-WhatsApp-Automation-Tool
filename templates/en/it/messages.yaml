@@ -1,0 +1,33 @@
+website_development:
+  name: "Website Development"
+  subject: "Professional Website Proposal"
+  template: |
+    Hi {business_name},
+
+    I noticed your business on Google Maps and saw that you don't have a professional website yet.
+
+    I specialize in building fast, mobile-friendly websites that connect directly to your WhatsApp, making it easier for customers to reach you.
+
+    Would you be open to a quick 5-minute demo of what I can build for you?
+
+    Best regards,
+    The Development Team
+  variables: ["business_name"]
+  language: en
+
+app_maintenance:
+  name: "App Maintenance"
+  subject: "Keep Your App Running Smoothly"
+  template: |
+    Hi {business_name},
+
+    Is your current app running a bit slow or having some bugs?
+
+    We offer professional app maintenance and optimization services to ensure your customers have a seamless experience.
+
+    Let me know if you'd like a free performance audit!
+
+    Best regards,
+    Technical Support Team
+  variables: ["business_name"]
+  language: en

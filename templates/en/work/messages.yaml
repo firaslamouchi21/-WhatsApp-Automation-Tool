@@ -1,0 +1,31 @@
+meeting_request:
+  name: "Meeting Request"
+  subject: "Request for a Brief Meeting"
+  template: |
+    Hi {business_name},
+
+    I'd like to schedule a short meeting to discuss potential collaboration opportunities between our companies.
+
+    Are you available for a 15-minute call sometime this week?
+
+    Best regards,
+    Professional Services Team
+  variables: ["business_name"]
+  language: en
+
+project_update:
+  name: "Project Update"
+  subject: "Update on Current Project"
+  template: |
+    Hi {business_name},
+
+    I wanted to provide you with a quick update on the progress of our current project.
+
+    Everything is moving along on schedule, and we expect to have the next milestone completed by Friday.
+
+    Let me know if you have any questions!
+
+    Best regards,
+    Project Management Team
+  variables: ["business_name"]
+  language: en

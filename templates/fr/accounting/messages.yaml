@@ -1,0 +1,33 @@
+declaration_impots:
+  name: "Aide à la Déclaration d'Impôts"
+  subject: "Simplifiez votre saison fiscale"
+  template: |
+    Bonjour {business_name},
+
+    La saison des impôts approche ! Vous sentez-vous submergé par la paperasse ?
+
+    Nous proposons des services complets de déclaration d'impôts et de planification financière adaptés aux petites entreprises.
+
+    Souhaitez-vous planifier une brève consultation pour voir comment nous pouvons vous aider à économiser de l'argent cette année ?
+
+    Cordialement,
+    L'équipe des Services Comptables
+  variables: ["business_name"]
+  language: fr
+
+comptabilite_mensuelle:
+  name: "Comptabilité Mensuelle"
+  subject: "Concentrez-vous sur votre entreprise, laissez-nous les chiffres"
+  template: |
+    Bonjour {business_name},
+
+    Gérer une entreprise est déjà assez difficile sans avoir à se soucier de chaque transaction.
+
+    Nos services de comptabilité mensuelle garantissent que vos dossiers sont toujours à jour et précis.
+
+    Êtes-vous intéressé par nos forfaits ?
+
+    Cordialement,
+    L'équipe de Gestion Financière
+  variables: ["business_name"]
+  language: fr

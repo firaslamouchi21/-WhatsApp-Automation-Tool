@@ -1,0 +1,33 @@
+developpement_site_web:
+  name: "Développement de Site Web"
+  subject: "Proposition de Site Web Professionnel"
+  template: |
+    Bonjour {business_name},
+
+    J'ai remarqué votre entreprise sur Google Maps et j'ai vu que vous n'aviez pas encore de site web professionnel.
+
+    Nous sommes spécialisés dans la création de sites web rapides, adaptés aux mobiles et connectés directement à votre WhatsApp, ce qui facilite le contact avec vos clients.
+
+    Seriez-vous ouvert à une démonstration rapide de 5 minutes de ce que nous pouvons construire pour vous ?
+
+    Cordialement,
+    L'équipe de Développement
+  variables: ["business_name"]
+  language: fr
+
+maintenance_app:
+  name: "Maintenance d'Application"
+  subject: "Gardez votre application en bon état"
+  template: |
+    Bonjour {business_name},
+
+    Votre application actuelle est-elle un peu lente ou présente-t-elle des bugs ?
+
+    Nous proposons des services professionnels de maintenance et d'optimisation d'applications pour garantir à vos clients une expérience fluide.
+
+    Faites-nous savoir si vous souhaitez un audit de performance gratuit !
+
+    Cordialement,
+    L'équipe de Support Technique
+  variables: ["business_name"]
+  language: fr

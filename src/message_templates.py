@@ -11,13 +11,28 @@ class TemplateError(Exception):
 class MessageTemplateManager:
     
     def __init__(self, templates_dir: Optional[Path] = None):
-        self.templates_dir = templates_dir or Path("config/templates")
+        self.templates_dir = templates_dir or Path("templates")
         self.templates: Dict[str, Dict[str, Any]] = {}
-        self._load_default_templates()
+        self._load_all_templates()
     
-    def _load_default_templates(self):
-        templates_file = Path(__file__).parent.parent / "templates" / "messages.yaml"
-        self.load_templates_from_file(templates_file)
+    def _load_all_templates(self):
+        if not self.templates_dir.exists():
+            self.templates_dir = Path(__file__).parent.parent / "templates"
+            
+        if not self.templates_dir.exists():
+            return
+
+        for yaml_file in self.templates_dir.rglob("*.yaml"):
+            try:
+                self.load_templates_from_file(yaml_file)
+            except TemplateError:
+                continue
+        
+        for json_file in self.templates_dir.rglob("*.json"):
+            try:
+                self.load_templates_from_file(json_file)
+            except TemplateError:
+                continue
     
     def load_templates_from_file(self, file_path: Path) -> None:
         if not file_path.exists():

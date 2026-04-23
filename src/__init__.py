@@ -1,9 +1,3 @@
-"""
-WhatsApp Automation Tool
-
-A professional tool for sending personalized WhatsApp messages to business leads.
-Supports configurable templates, rate limiting, and batch processing.
-"""
 
 __version__ = "1.0.0"
 __author__ = "Firas"
@@ -15,6 +9,6 @@ from .message_templates import MessageTemplateManager
 
 __all__ = [
     "WhatsAppAutomation",
-    "PhoneValidator", 
+    "PhoneValidator",
     "MessageTemplateManager"
 ]

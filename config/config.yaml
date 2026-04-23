@@ -1,16 +1,14 @@
-# WhatsApp Automation Tool Configuration
-
 whatsapp:
-  rate_limit_delay: 20  # seconds between messages
-  wait_time: 10         # seconds to wait for WhatsApp Web
-  tab_close: true       # close tab after sending
-  close_time: 3          # seconds before closing tab
-  max_retries: 3        # maximum retry attempts
+  rate_limit_delay: 20
+  wait_time: 10
+  tab_close: true
+  close_time: 3
+  max_retries: 3
 
 logging:
   level: "INFO"
   log_file: "logs/whatsapp_automation.log"
-  max_file_size: 10485760  # 10MB
+  max_file_size: 10485760
   backup_count: 5
 
 processing:

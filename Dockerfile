@@ -38,12 +38,17 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt && \
     pip install --no-cache-dir -r requirements-dev.txt
 
+COPY web_ui/ ./web_ui/
 COPY src/ ./src/
 COPY config/ ./config/
+COPY templates/ ./templates/
 COPY main.py .
 COPY setup.py .
 
 RUN mkdir -p logs data output
+
+# Install web UI dependencies
+RUN pip install --no-cache-dir -r web_ui/requirements.txt
 
 ENV DISPLAY=:99
 
@@ -64,6 +69,9 @@ sleep 1\n\
 # Start websockify for noVNC\n\
 websockify --web=/usr/share/novnc 6080 localhost:5900 &\n\
 sleep 1\n\
+# Start Flask Web UI\n\
+cd /app/web_ui && python app.py &\n\
+sleep 2\n\
 # Start Chromium to WhatsApp Web\n\
 chromium --no-sandbox --disable-dev-shm-usage --disable-gpu --window-size=1280,720 --window-position=0,0 https://web.whatsapp.com &\n\
 sleep 2\n\
@@ -73,6 +81,6 @@ exec "$@"' > /entrypoint.sh && \
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-EXPOSE 8000 6080 5900
+EXPOSE 5000 8000 6080 5900
 
 CMD ["python", "main.py", "--help"]

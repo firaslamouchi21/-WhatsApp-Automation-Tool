@@ -1,4 +1,3 @@
-"""Pytest configuration and fixtures."""
 
 import pytest
 import pandas as pd
@@ -8,7 +7,6 @@ from typing import Generator
 
 @pytest.fixture
 def sample_leads_csv(tmp_path: Path) -> Generator[Path, None, None]:
-    """Create a sample CSV file with leads for testing."""
     csv_file = tmp_path / "test_leads.csv"
     
     data = {
@@ -25,7 +23,6 @@ def sample_leads_csv(tmp_path: Path) -> Generator[Path, None, None]:
 
 @pytest.fixture
 def invalid_leads_csv(tmp_path: Path) -> Generator[Path, None, None]:
-    """Create a CSV file with invalid phone numbers for testing."""
     csv_file = tmp_path / "invalid_leads.csv"
     
     data = {

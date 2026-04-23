@@ -1,0 +1,33 @@
+fitness_coaching:
+  name: "Fitness Coaching"
+  subject: "Reach Your Health Goals"
+  template: |
+    Hi {business_name},
+
+    Looking to get in better shape this year?
+
+    We offer personalized fitness coaching and nutrition plans designed to fit your busy lifestyle.
+
+    Would you like to try a free introductory session?
+
+    Best regards,
+    Health and Wellness Team
+  variables: ["business_name"]
+  language: en
+
+home_cleaning:
+  name: "Home Cleaning"
+  subject: "Enjoy a Sparkling Clean Home"
+  template: |
+    Hi {business_name},
+
+    Life is busy! Why spend your weekends cleaning?
+
+    Our professional home cleaning services are reliable, thorough, and affordable.
+
+    Can we provide you with a free quote?
+
+    Best regards,
+    Cleaning Services Team
+  variables: ["business_name"]
+  language: en

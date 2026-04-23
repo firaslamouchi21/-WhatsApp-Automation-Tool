@@ -1,0 +1,86 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "whatsapp-automation-tool"
+dynamic = ["version"]
+description = "Professional WhatsApp automation tool for business outreach - Docker only"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Firas", email = "contact@example.com"}
+]
+maintainers = [
+    {name = "Firas", email = "contact@example.com"}
+]
+keywords = ["whatsapp", "automation", "marketing", "business", "outreach", "messaging", "docker"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Communications :: Chat",
+    "Topic :: Office/Business",
+]
+requires-python = ">=3.11"
+dependencies = [
+    "pandas>=2.0.0",
+    "pywhatkit>=5.4",
+    "phonenumbers>=8.13.0",
+    "pyyaml>=6.0",
+    "tqdm>=4.65.0",
+    "openpyxl>=3.1.0",
+    "requests>=2.31.0",
+    "click>=8.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.0",
+    "black>=23.7.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.5.0",
+    "pre-commit>=3.3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/firaslamouchi21/whatsapp-automation-tool"
+Repository = "https://github.com/firaslamouchi21/whatsapp-automation-tool"
+"Bug Tracker" = "https://github.com/firaslamouchi21/whatsapp-automation-tool/issues"
+
+[tool.setuptools.dynamic]
+version = {attr = "src.__init__.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml", "*.yml", "*.json", "*.txt"]
+
+[tool.black]
+line-length = 100
+target-version = ['py311', 'py312']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

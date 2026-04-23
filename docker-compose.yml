@@ -9,6 +9,7 @@ services:
       - ./logs:/app/logs
       - ./output:/app/output
       - ./config:/app/config
+      - ./templates:/app/templates
       - ./config/config.yaml:/app/config/config.yaml:ro
     environment:
       - PYTHONUNBUFFERED=1
@@ -16,7 +17,9 @@ services:
       - BROWSER=chromium-wrapper
       - WHATSAPP_RATE_LIMIT=20
       - LOG_LEVEL=INFO
+      - SECRET_KEY=change-me-in-production
     ports:
+      - "5000:5000"
       - "6080:6080"
       - "5900:5900"
     command: ["sleep", "infinity"]

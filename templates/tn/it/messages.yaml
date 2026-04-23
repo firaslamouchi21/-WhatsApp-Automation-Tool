@@ -1,0 +1,33 @@
+website_development_tn:
+  name: "تطوير المواقع (تونسي)"
+  subject: "عرض تطوير موقع إلكتروني احترافي"
+  template: |
+    مرحبا {business_name}،
+
+    شفت الـ business متاعكم على Google Maps وما شاء الله الخدمة باهية، أما لاحظت إلي ناقصكم site web pro باش تزيدو تقدمو.
+
+    أنا متخصص في الـ creation متاع des sites web سريعين وبرشة ومربوطين بالـ WhatsApp طول، هكا الـ client يوصلكم ديراكت.
+
+    تحبو نعملو demo صغيرة في 5 دقائق نوريكم شنوا نجمو نخدمولكم؟
+
+    ربي يوفق،
+    فريق التطوير
+  variables: ["business_name"]
+  language: tn
+
+app_maintenance_tn:
+  name: "صيانة التطبيقات (تونسي)"
+  subject: "أبقى تطبيقك يخدم ديما لاباس"
+  template: |
+    مرحبا {business_name}،
+
+    الـ application متاعكم ثقيلة شوية والا فيها des bugs؟
+
+    نحن نخدمو صيانة الـ apps ونصلحوهم باش الـ clients متاعكم يلقاو خدمة نظيفة.
+
+    كان تحبو نعملولكم audit de performance بلاش، قولولنا!
+
+    ربي يوفق،
+    فريق الدعم الفني
+  variables: ["business_name"]
+  language: tn

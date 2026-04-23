@@ -41,7 +41,6 @@ class WhatsAppAutomation:
         self.close_time = self.config.get("close_time", 3)
     
     def load_leads(self, file_path: Path) -> pd.DataFrame:
-        """Load leads from CSV file."""
         if not file_path.exists():
             raise FileNotFoundError(f"Leads file not found: {file_path}")
         
@@ -61,7 +60,6 @@ class WhatsAppAutomation:
             raise
     
     def validate_lead(self, row: pd.Series) -> Optional[Dict[str, Any]]:
-        """Validate and prepare lead data."""
         phone_number = row.get("Phone Number")
         business_name = row.get("Business Name", "")
         category = row.get("Category", "")
@@ -141,7 +139,7 @@ class WhatsAppAutomation:
                 try:
                     message = self.template_manager.render_template(
                         template_name,
-                        {"business_name": lead["business_name"]}
+                        lead
                     )
                     
                     if dry_run:
@@ -197,7 +195,6 @@ class WhatsAppAutomation:
         start_index: int = 0,
         end_index: Optional[int] = None
     ) -> CampaignResult:
-        """Run complete WhatsApp campaign."""
         
         try:
             leads_df = self.load_leads(leads_file)

@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="step-indicator">
+    <div class="step" id="step-1"><div class="step-circle">1</div><div class="step-label">Template</div></div>
+    <div class="step" id="step-2"><div class="step-circle">2</div><div class="step-label">Leads</div></div>
+    <div class="step" id="step-3"><div class="step-circle">3</div><div class="step-label">Confirm</div></div>
+    <div class="step" id="step-4"><div class="step-circle">4</div><div class="step-label">WhatsApp</div></div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <!-- Templates -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between">
+                <h5><i class="bi bi-chat-square-text me-2"></i>Templates</h5>
+                <button class="btn btn-sm btn-success" onclick="showAddTemplate()"><i class="bi bi-plus-lg"></i>Add</button>
+            </div>
+            <div class="card-body">
+                <div class="btn-group mb-3">
+                    <button class="btn btn-outline-secondary btn-sm active" onclick="filterLang('all')">All</button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="filterLang('en')">EN</button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="filterLang('fr')">FR</button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="filterLang('ar')">AR</button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="filterLang('tn')">TN</button>
+                </div>
+                <div id="templates-grid" class="row g-2"></div>
+            </div>
+        </div>
+        
+        <!-- Leads -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h5><i class="bi bi-people me-2"></i>Leads</h5>
+                <div>
+                    <button class="btn btn-sm btn-primary" onclick="toggleLeadForm()"><i class="bi bi-plus"></i>Add</button>
+                    <button class="btn btn-sm btn-secondary" onclick="document.getElementById('csvFile').click()">
+                        <i class="bi bi-upload"></i>CSV
+                    </button>
+                    <input type="file" id="csvFile" style="display:none" accept=".csv" onchange="uploadCSV(event)">
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="leadForm" style="display:none" class="mb-3">
+                    <div class="row g-2">
+                        <div class="col"><input class="form-control" id="lName" placeholder="Business Name"></div>
+                        <div class="col"><input class="form-control" id="lPhone" placeholder="Phone (+123...)"></div>
+                        <div class="col-auto"><button class="btn btn-success" onclick="addLead()">Add</button></div>
+                    </div>
+                </div>
+                <table class="table table-sm" id="leadsTable">
+                    <thead><tr><th>#</th><th>Name</th><th>Phone</th><th></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+                <div id="noLeads" class="text-center text-muted py-4">No leads added</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card sticky-top" style="top:20px">
+            <div class="card-header"><h5><i class="bi bi-megaphone me-2"></i>Campaign</h5></div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="small text-muted">Template</label>
+                    <div id="selTmpl" class="p-2 bg-light rounded"><span class="text-muted">None selected</span></div>
+                </div>
+                <div class="mb-3">
+                    <label class="small text-muted">Leads</label>
+                    <div><span id="leadCount" class="h4">0</span> recipients</div>
+                </div>
+                <div class="mb-3" id="previewBox" style="display:none">
+                    <label class="small text-muted">Preview</label>
+                    <div class="p-2 bg-light border-start border-success" id="msgPreview" style="white-space:pre-wrap;font-size:0.85rem"></div>
+                </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-success" id="btnConfirm" onclick="confirmCampaign()" disabled>Confirm</button>
+                    <a href="/vnc" class="btn btn-whatsapp" id="btnVNC" style="display:none" target="_blank">
+                        <i class="bi bi-display me-2"></i>Open WhatsApp Web
+                    </a>
+                    <button class="btn btn-outline-secondary" onclick="resetCampaign()">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Template Modal -->
+<div class="modal fade" id="tmplModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h5>Add Template</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <input class="form-control mb-2" id="tName" placeholder="Template Name">
+                <select class="form-select mb-2" id="tLang">
+                    <option value="en">English</option><option value="fr">French</option>
+                    <option value="ar">Arabic</option><option value="tn">Tunisian</option>
+                </select>
+                <select class="form-select mb-2" id="tCat">
+                    <option value="it">IT</option><option value="accounting">Accounting</option>
+                    <option value="work">Work</option><option value="life">Life</option>
+                </select>
+                <textarea class="form-control" id="tText" rows="4" placeholder="Message with {business_name}"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" onclick="saveTemplate()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let templates = {}, leads = [], selectedTmpl = null;
+let currentLang = 'all';
+
+document.addEventListener('DOMContentLoaded', loadData);
+
+async function loadData() {
+    try {
+        templates = await apiCall('/api/templates');
+        renderTemplates();
+        updateStatus();
+    } catch(e) { console.error(e); }
+}
+
+function renderTemplates() {
+    const grid = document.getElementById('templates-grid');
+    grid.innerHTML = '';
+    Object.entries(templates).forEach(([id, t]) => {
+        if (currentLang !== 'all' && t.language !== currentLang) return;
+        const badge = `<span class="badge bg-${t.language === 'en' ? 'primary' : t.language === 'fr' ? 'warning' : t.language === 'ar' ? 'success' : 'danger'}">${t.language}</span>`;
+        grid.innerHTML += `
+            <div class="col-md-6">
+                <div class="card ${selectedTmpl === id ? 'border-success' : ''}" onclick="selectTmpl('${id}')" style="cursor:pointer">
+                    <div class="card-body py-2">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="mb-0">${t.name}</h6>
+                            ${badge}
+                        </div>
+                        <small class="text-muted">${t.variables?.join(', ') || ''}</small>
+                    </div>
+                </div>
+            </div>`;
+    });
+}
+
+function filterLang(lang) { currentLang = lang; renderTemplates(); }
+
+async function selectTmpl(id) {
+    selectedTmpl = id;
+    renderTemplates();
+    document.getElementById('selTmpl').innerHTML = `<strong>${templates[id].name}</strong>`;
+    document.getElementById('step-1').classList.add('completed');
+    updateStatus();
+    
+    if (leads.length > 0) {
+        const preview = await apiCall('/api/campaign/preview', {
+            method: 'POST',
+            body: JSON.stringify({template: id, lead: leads[0]})
+        });
+        document.getElementById('previewBox').style.display = 'block';
+        document.getElementById('msgPreview').textContent = preview.message;
+    }
+}
+
+function toggleLeadForm() {
+    const f = document.getElementById('leadForm');
+    f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+async function addLead() {
+    const name = document.getElementById('lName').value;
+    const phone = document.getElementById('lPhone').value;
+    if (!name || !phone) return showToast('Name and phone required', 'danger');
+    
+    const lead = {business_name: name, phone_number: phone, category: ''};
+    leads.push(lead);
+    renderLeads();
+    document.getElementById('lName').value = '';
+    document.getElementById('lPhone').value = '';
+    updateStatus();
+}
+
+function renderLeads() {
+    const tbody = document.querySelector('#leadsTable tbody');
+    const empty = document.getElementById('noLeads');
+    tbody.innerHTML = '';
+    
+    if (leads.length === 0) {
+        empty.style.display = 'block';
+        return;
+    }
+    empty.style.display = 'none';
+    
+    leads.forEach((l, i) => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${i+1}</td>
+                <td>${l.business_name}</td>
+                <td>${l.phone_number}</td>
+                <td><button class="btn btn-sm btn-danger" onclick="removeLead(${i})"><i class="bi bi-trash"></i></button></td>
+            </tr>`;
+    });
+    document.getElementById('leadCount').textContent = leads.length;
+}
+
+function removeLead(idx) {
+    leads.splice(idx, 1);
+    renderLeads();
+    updateStatus();
+}
+
+async function uploadCSV(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+        const resp = await fetch('/api/leads/upload', {method: 'POST', body: formData});
+        const data = await resp.json();
+        if (data.success) {
+            leads = data.leads || [];
+            renderLeads();
+            document.getElementById('step-2').classList.add('completed');
+            updateStatus();
+            showToast(`Loaded ${leads.length} leads`);
+        } else {
+            showToast(data.error || 'Upload failed', 'danger');
+        }
+    } catch(e) { showToast('Upload failed', 'danger'); }
+}
+
+function updateStatus() {
+    const canConfirm = selectedTmpl && leads.length > 0;
+    document.getElementById('btnConfirm').disabled = !canConfirm;
+}
+
+async function confirmCampaign() {
+    if (!selectedTmpl || leads.length === 0) return;
+    
+    try {
+        const resp = await apiCall('/api/campaign/start', {
+            method: 'POST',
+            body: JSON.stringify({template: selectedTmpl, leads: leads})
+        });
+        document.getElementById('step-3').classList.add('completed');
+        document.getElementById('btnConfirm').style.display = 'none';
+        document.getElementById('btnVNC').style.display = 'block';
+        showToast('Campaign ready! Open WhatsApp Web to continue.');
+    } catch(e) { console.error(e); }
+}
+
+function resetCampaign() {
+    selectedTmpl = null;
+    leads = [];
+    renderTemplates();
+    renderLeads();
+    document.getElementById('selTmpl').innerHTML = '<span class="text-muted">None selected</span>';
+    document.getElementById('previewBox').style.display = 'none';
+    document.getElementById('btnConfirm').style.display = 'block';
+    document.getElementById('btnVNC').style.display = 'none';
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('completed'));
+    updateStatus();
+}
+
+function showAddTemplate() {
+    new bootstrap.Modal(document.getElementById('tmplModal')).show();
+}
+
+async function saveTemplate() {
+    const name = document.getElementById('tName').value;
+    const lang = document.getElementById('tLang').value;
+    const cat = document.getElementById('tCat').value;
+    const text = document.getElementById('tText').value;
+    
+    if (!name || !text) return showToast('Name and message required', 'danger');
+    
+    const id = name.toLowerCase().replace(/\s+/g, '_');
+    
+    try {
+        await apiCall('/api/templates', {
+            method: 'POST',
+            body: JSON.stringify({
+                template_id: id, name: name, template_text: text,
+                language: lang, category: cat, variables: ['business_name']
+            })
+        });
+        bootstrap.Modal.getInstance(document.getElementById('tmplModal')).hide();
+        showToast('Template saved!');
+        loadData();
+    } catch(e) { console.error(e); }
+}
+</script>
+{% endblock %}

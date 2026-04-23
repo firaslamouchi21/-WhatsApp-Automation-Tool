@@ -1,0 +1,33 @@
+fitness_coaching_tn:
+  name: "تدريب رياضي (تونسي)"
+  subject: "أوصل للأهداف الصحية متاعك"
+  template: |
+    مرحبا {business_name}،
+
+    تحب تولي في form باهية العام هذا؟
+
+    نقدمو coaching رياضي وماكلة منظمة على قياسك وعلى وقتك.
+
+    تحب تجرب séance d'introduction بلاش؟
+
+    ربي يوفق،
+    فريق الصحة
+  variables: ["business_name"]
+  language: tn
+
+home_cleaning_tn:
+  name: "تنظيف المنازل (تونسي)"
+  subject: "تمتع بدار نظيفة وتلمع"
+  template: |
+    مرحبا {business_name}،
+
+    وقتك ضيق! علاش تضيع الـ weekend في التنظيف؟
+
+    خدمتنا متاع تنظيف الديار pro، مضمونة، وبسوم باهي.
+
+    نجمو نعطيوك devis gratuit؟
+
+    ربي يوفق،
+    فريق التنظيف
+  variables: ["business_name"]
+  language: tn

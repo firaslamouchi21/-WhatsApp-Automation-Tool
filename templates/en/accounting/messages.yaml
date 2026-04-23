@@ -1,0 +1,33 @@
+tax_filing:
+  name: "Tax Filing Assistance"
+  subject: "Simplify Your Tax Season"
+  template: |
+    Hi {business_name},
+
+    Tax season is approaching! Are you feeling overwhelmed with the paperwork?
+
+    We provide comprehensive tax filing and financial planning services tailored for small businesses.
+
+    Would you like to schedule a brief consultation to see how we can help you save money this year?
+
+    Best regards,
+    Accounting Services Team
+  variables: ["business_name"]
+  language: en
+
+bookkeeping:
+  name: "Monthly Bookkeeping"
+  subject: "Focus on Your Business, Leave the Numbers to Us"
+  template: |
+    Hi {business_name},
+
+    Managing a business is hard enough without worrying about every single transaction.
+
+    Our monthly bookkeeping services ensure your records are always up-to-date and accurate.
+
+    Are you interested in hearing more about our packages?
+
+    Best regards,
+    Financial Management Team
+  variables: ["business_name"]
+  language: en
