@@ -1,5 +1,5 @@
 import json
-import yaml  # type: ignore
+import yaml  # type: ignore[import-untyped]
 from pathlib import Path
 from typing import Dict, Any, Optional
 
@@ -60,11 +60,12 @@ class MessageTemplateManager:
         if not template_data:
             raise TemplateError(f"Template not found: {template_name}")
 
-        template_text = template_data["template"]
+        template_text: str = template_data["template"]
         if not isinstance(template_text, str):
             raise TemplateError(f"Invalid template format for: {template_name}")
         try:
-            return template_text.format_map(variables)
+            result: str = template_text.format_map(variables)
+            return result
         except KeyError as e:
             raise TemplateError(f"Missing variable in template: {e}")
     
